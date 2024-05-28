@@ -8,10 +8,10 @@ import androidx.compose.ui.unit.sp
 import com.example.coffeshop.R
 
 val OswaldBold = FontFamily(
-    Font(R.font.heavy, FontWeight.SemiBold)
+    Font(R.font.montserratbold, FontWeight.SemiBold)
 )
 val OswaldLight = FontFamily(
-    Font(R.font.book, FontWeight.Light)
+    Font(R.font.montserratregular, FontWeight.Light)
 )
 
 val coffeshopTypography = Typography(

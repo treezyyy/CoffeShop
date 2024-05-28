@@ -3,7 +3,9 @@ package com.example.coffeshop
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -25,8 +27,16 @@ import com.example.coffeshop.ui.theme.LogoColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import com.example.coffeshop.ui.theme.BrownColor
+import com.example.coffeshop.ui.theme.white
 
 
 class MainActivity : ComponentActivity() {
@@ -52,7 +62,7 @@ fun ProductList() {
     LazyColumn(
         modifier = Modifier.fillMaxSize() // Заполнение всей доступной высоты
     ) {
-        itemsIndexed(products) {index, product ->
+        itemsIndexed(products) { _, product ->
             Text(
                 text = product,
                 style = MaterialTheme.typography.displayLarge,
@@ -74,13 +84,37 @@ fun MainScreen() {
 
     BottomSheetScaffold(
         scaffoldState = sheetState,
-        sheetContent = {
-            Box(
-                modifier = Modifier.fillMaxWidth().heightIn(min = 256.dp, max = 600.dp)
-            )
-            ProductList()
+        sheetContent = {Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp-12.dp)
+                .background(Color.Transparent) // Устанавливаем прозрачный фон для основного Box
+        ) {
+
+            Card(
+                shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18 .dp),
+                backgroundColor = MaterialTheme.colorScheme.background, // Задаем белый цвет фона для Card
+                elevation = 8.dp,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp-12.dp)
+                    .align(Alignment.TopCenter) // Центрируем Card внутри Box
+                    .background(color = MaterialTheme.colorScheme.background)
+            ) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(Color(0xFFFEFEFE)) // Цвет фона для содержимого
+                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) // Закругление углов для содержимого
+                ) {
+
+                    ProductList()
+                }
+            }
+        }
         },
-        sheetPeekHeight = 600.dp,
+
+        sheetPeekHeight = 458.dp,
         content = {
             Box(
                 modifier = Modifier
@@ -108,13 +142,16 @@ fun MainScreen() {
                     ) {
                         Text(
                             text = "Кофейку?",
-                            color = LogoColor, // Цвет текста
+                            color = BrownColor, // Цвет текста
                             fontSize = 16.sp, // Размер текста
                             style = MaterialTheme.typography.bodyLarge,
                             modifier = Modifier
                                 .padding(start = 16.dp)
                                 .weight(1f) // Отступ справа
                         )
+
+                        // Прямоугольник похожий на карту
+
                         IconButton(
                             onClick = { /* Действие при нажатии */ },
                             modifier = Modifier
@@ -126,6 +163,29 @@ fun MainScreen() {
                                 contentDescription = "Меню аккаунта"
                             )
                         }
+                    }
+                    Box(
+                        modifier = Modifier
+                            .paddingFromBaseline(top = 64.dp)
+                            .size(350.dp,160.dp)
+                            .background(Color(0xFF40E0D0),
+                                shape = RoundedCornerShape(16.dp)) // Цвет берюзовой карты
+                            .align(Alignment.CenterHorizontally)
+                            .border(1.dp,Color.White,
+                            shape = RoundedCornerShape(16.dp))
+                    )
+                    {
+                        // Добавьте другие элементы внутри прямоугольника
+                        Text(
+                            text = "Добавьте здесь текст",
+                            color = Color.White,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .paddingFromBaseline(top = 48.dp) // Расстояние от базовой линии сверху
+                                .align(Alignment.TopCenter) // Выравнивание по центру
+                        )
                     }
                 }
             }
