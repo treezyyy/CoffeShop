@@ -30,6 +30,7 @@ import com.example.coffeshop.ui.theme.LogoColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -86,6 +87,14 @@ fun MainScreen() {
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val scope = rememberCoroutineScope()
+
+    // Фейковые данные для подзаголовков и товаров
+    val categories = listOf("Кофе", "Чай", "Сезонные напитки")
+    val productCategories = listOf(
+        "Кофе",
+        "Чай",
+        "Сезонные напитки"
+    )
 
     BottomSheetScaffold(
         scaffoldState = sheetState,
@@ -164,6 +173,19 @@ fun MainScreen() {
                                 context.startActivity(intent)
                             }
                     )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+// Карусель для подзаголовков с товарами
+                    // Карусель для подзаголовков с товарами
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(productCategories) { category ->
+                            CategoryItem(category)
+                        }
+                    }
 
                     Spacer(modifier = Modifier.height(16.dp))
 
@@ -250,4 +272,22 @@ fun MainScreen() {
             }
         }
     )
+}
+
+@Composable
+fun CategoryItem(category: String) {
+    Box(
+        modifier = Modifier
+            .padding(8.dp)
+            .height(40.dp)
+            .background(Color.Gray, RoundedCornerShape(8.dp))
+            .width(IntrinsicSize.Min)
+    ) {
+        Text(
+            text = category,
+            style = MaterialTheme.typography.bodyLarge,
+            color = Color.White,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
 }
