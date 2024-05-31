@@ -1,11 +1,14 @@
 package com.example.coffeshop
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
@@ -26,6 +29,7 @@ import com.example.coffeshop.ui.theme.CoffeShopTheme
 import com.example.coffeshop.ui.theme.LogoColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -33,6 +37,7 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.coffeshop.ui.theme.BrownColor
@@ -101,12 +106,66 @@ fun MainScreen() {
                     .align(Alignment.TopCenter) // Центрируем Card внутри Box
                     .background(color = MaterialTheme.colorScheme.background)
             ) {
-                Box(
+                Column(
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color(0xFFFEFEFE)) // Цвет фона для содержимого
                         .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) // Закругление углов для содержимого
                 ) {
+                    Text(
+                        text = "Акции и новости",
+                        modifier = Modifier
+                            .padding(16.dp) // Отступ для заголовка
+                            .align(Alignment.Start),
+                        style = MaterialTheme.typography.bodyLarge, // Выбор стиля для заголовка
+                        color = Color.Black // Убедитесь, что текст видим
+                    )
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Карусель с элементами
+                    LazyRow(
+                        contentPadding = PaddingValues(horizontal = 16.dp),
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        items(5) { index ->
+                            Box(
+                                modifier = Modifier
+                                    .size(150.dp, 100.dp)
+                                    .background(Color.Black, RoundedCornerShape(8.dp))
+                            )
+                        }
+                    }
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    Text(
+                        text = "Адреса кофеен",
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .align(Alignment.Start),
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = Color.Black
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
+
+                    // Прямоугольник для Google Maps
+                    val context = LocalContext.current
+                    Box(
+                        modifier = Modifier
+                            .padding(16.dp)
+                            .size(200.dp, 100.dp)
+                            .background(Color.Black, RoundedCornerShape(8.dp))
+                            .clickable {
+                                val intent = Intent(
+                                    Intent.ACTION_VIEW,
+                                    Uri.parse("geo:53.226387,44.925847")
+                                )
+                                context.startActivity(intent)
+                            }
+                    )
+
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     ProductList()
                 }
