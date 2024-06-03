@@ -8,10 +8,13 @@ import androidx.compose.ui.unit.sp
 import com.example.coffeshop.R
 
 val OswaldBold = FontFamily(
-    Font(R.font.montserratbold, FontWeight.SemiBold)
+    Font(R.font.extbold, FontWeight.SemiBold)
 )
 val OswaldLight = FontFamily(
-    Font(R.font.montserratregular, FontWeight.Light)
+    Font(R.font.oswaldlight, FontWeight.Light)
+)
+val Oswaldesemi = FontFamily(
+    Font(R.font.oswaldsemibold, FontWeight.Light)
 )
 
 val coffeshopTypography = Typography(
@@ -24,5 +27,11 @@ val coffeshopTypography = Typography(
         fontFamily = OswaldLight,
         fontWeight = FontWeight.Light,
         fontSize = 16.sp
+    ),
+    labelLarge = androidx.compose.ui.text.TextStyle(
+        fontFamily = Oswaldesemi,
+        fontWeight = FontWeight.Light,
+        fontSize = 16.sp
     )
+
 )

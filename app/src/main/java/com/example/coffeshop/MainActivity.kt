@@ -5,6 +5,7 @@ import android.net.Uri
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -36,7 +37,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
@@ -60,7 +64,6 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-
 @Composable
 fun ProductList() {
     val products = List(50) { "Product $it" }
@@ -83,10 +86,15 @@ fun ProductList() {
 @OptIn(ExperimentalMaterialApi::class)
 @Composable
 fun MainScreen() {
+
     val sheetState = rememberBottomSheetScaffoldState(
         bottomSheetState = BottomSheetState(BottomSheetValue.Collapsed)
     )
     val scope = rememberCoroutineScope()
+    var isFlipped by remember { mutableStateOf(false) }
+    val rotation by animateFloatAsState(if (isFlipped) 180f else 0f)
+    val cardFrontAlpha by animateFloatAsState(if (isFlipped) 0f else 1f)
+    val cardBackAlpha by animateFloatAsState(if (isFlipped) 1f else 0f)
 
     // Фейковые данные для подзаголовков и товаров
     val categories = listOf("Кофе", "Чай", "Сезонные напитки")
@@ -205,33 +213,41 @@ fun MainScreen() {
                 Column(
                     modifier = Modifier
                         .fillMaxSize()
-                        .padding(top = 48.dp),
+                        .padding(top = 36.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
                     Text(
-                        text = "Estetic Coffee",
+                        text = "ESTETIC COFFEE",
                         color = LogoColor,
-                        fontSize = 48.sp,
+                        fontSize = 36.sp,
                         style = MaterialTheme.typography.displayLarge,
                         modifier = Modifier.align(Alignment.CenterHorizontally)
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        Text(
-                            text = "Кофейку?",
-                            color = BrownColor, // Цвет текста
-                            fontSize = 16.sp, // Размер текста
-                            style = MaterialTheme.typography.bodyLarge,
+                        Column(
                             modifier = Modifier
-                                .padding(start = 16.dp)
+                                .padding(start = 20.dp)
                                 .weight(1f) // Отступ справа
-                        )
-
-                        // Прямоугольник похожий на карту
+                        ) {
+                            Text(
+                                text = "Кофейку,",
+                                color = BrownColor, // Цвет текста
+                                fontSize = 24.sp, // Размер текста
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                            Spacer(modifier = Modifier.height(0.dp)) // Adjust this value to control the spacing
+                            Text(
+                                text = "Худан?", // Текст с именем
+                                color = BrownColor, // Цвет текста
+                                fontSize = 24.sp, // Размер текста
+                                style = MaterialTheme.typography.displayLarge,
+                            )
+                        }
 
                         IconButton(
                             onClick = { /* Действие при нажатии */ },
@@ -247,26 +263,99 @@ fun MainScreen() {
                     }
                     Box(
                         modifier = Modifier
-                            .paddingFromBaseline(top = 64.dp)
-                            .size(350.dp,160.dp)
-                            .background(Color(0xFF40E0D0),
-                                shape = RoundedCornerShape(16.dp)) // Цвет берюзовой карты
-                            .align(Alignment.CenterHorizontally)
-                            .border(1.dp,Color.White,
-                            shape = RoundedCornerShape(16.dp))
-                    )
-                    {
-                        // Добавьте другие элементы внутри прямоугольника
-                        Text(
-                            text = "Добавьте здесь текст",
-                            color = Color.White,
-                            fontSize = 24.sp,
-                            fontWeight = FontWeight.Bold,
-                            textAlign = TextAlign.Center,
+                            .paddingFromBaseline(top = 72.dp)
+                            .size(350.dp, 160.dp)
+                            .graphicsLayer {
+                                rotationY = rotation
+                                cameraDistance = 12f * density
+                                transformOrigin = TransformOrigin.Center // Set pivot point to the center
+                            }
+                            .clickable { isFlipped = !isFlipped }
+                    ) {
+                        Box(
                             modifier = Modifier
-                                .paddingFromBaseline(top = 48.dp) // Расстояние от базовой линии сверху
-                                .align(Alignment.TopCenter) // Выравнивание по центру
+                                .matchParentSize()
+                                .background(
+                                    color = if (isFlipped) Color.White else Color(0xFF40E0D0),
+                                    shape = RoundedCornerShape(16.dp)
+                                )
+                                .border(1.dp, Color.White, shape = RoundedCornerShape(16.dp))
                         )
+
+                        if (!isFlipped) {
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .padding(top = 8.dp)
+                                    .alpha(cardFrontAlpha),
+                                horizontalAlignment = Alignment.CenterHorizontally
+                            ) {
+                                Text(
+                                    text = "МОЯ КАРТА COFFEE",
+                                    color = Color.White,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .paddingFromBaseline(top = 0.dp)
+                                )
+                                Text(
+                                    text = "кешбек 3%",
+                                    color = Color.White,
+                                    fontSize = 12.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .paddingFromBaseline(top = 12.dp)
+                                )
+                                Text(
+                                    text = "0",
+                                    color = Color.White,
+                                    fontSize = 32.sp,
+                                    style = MaterialTheme.typography.labelLarge,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .paddingFromBaseline(top = 12.dp)
+                                )
+                                var progress by remember { mutableStateOf(0.5f) } // Set initial progress to 50%
+
+                                Spacer(modifier = Modifier.height(8.dp))
+                                LinearProgressIndicator(
+                                    progress = progress,
+                                    color = Color.White,
+                                    backgroundColor = Color(0xFF149B8A),
+                                    modifier = Modifier
+                                        .fillMaxWidth(0.6f)
+                                        .padding(horizontal = 24.dp)
+                                        .height(8.dp)
+                                        .clip(RoundedCornerShape(4.dp))
+                                )
+                                Text(
+                                    text = "До подарка осталось 777",
+                                    color = Color.White,
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center,
+                                    modifier = Modifier
+                                        .paddingFromBaseline(top = 14.dp)
+                                )
+                            }
+                        } else {
+                            Box(
+                                modifier = Modifier
+                                    .fillMaxSize()
+                                    .alpha(cardBackAlpha),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Text(
+                                    text = "Обратная сторона",
+                                    color = Color.Black,
+                                    fontSize = 20.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    textAlign = TextAlign.Center
+                                )
+                            }
+                        }
                     }
                 }
             }
