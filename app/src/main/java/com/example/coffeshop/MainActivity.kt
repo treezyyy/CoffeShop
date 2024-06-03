@@ -13,7 +13,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -47,11 +46,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.coffeshop.ui.theme.BrownColor
 import com.example.coffeshop.ui.theme.white
-
+import kotlinx.coroutines.launch
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // Проверка авторизации
+        if (!isUserLoggedIn()) {
+            startActivity(Intent(this, LoginActivity::class.java))
+            finish()
+            return
+        }
+
         setContent {
             CoffeShopTheme {
                 Surface(
@@ -61,6 +68,13 @@ class MainActivity : ComponentActivity() {
                 }
             }
         }
+    }
+
+    private fun isUserLoggedIn(): Boolean {
+        // Здесь должна быть логика проверки авторизации пользователя.
+        // Для упрощения примера возвращаем true.
+        // В реальном приложении это может быть проверка токена или данных пользователя.
+        return true
     }
 }
 
@@ -249,8 +263,13 @@ fun MainScreen() {
                             )
                         }
 
+                        val context = LocalContext.current
+
                         IconButton(
-                            onClick = { /* Действие при нажатии */ },
+                            onClick = {
+                                val intent = Intent(context, ProfileActivity::class.java)
+                                context.startActivity(intent)
+                            },
                             modifier = Modifier
                                 .size(48.dp)
                                 .padding(end = 16.dp) // Размер кружка
