@@ -34,6 +34,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
 import androidx.compose.ui.draw.alpha
@@ -110,13 +111,6 @@ fun MainScreen() {
     val cardFrontAlpha by animateFloatAsState(if (isFlipped) 0f else 1f)
     val cardBackAlpha by animateFloatAsState(if (isFlipped) 1f else 0f)
 
-    // Фейковые данные для подзаголовков и товаров
-    val categories = listOf("Кофе", "Чай", "Сезонные напитки")
-    val productCategories = listOf(
-        "Кофе",
-        "Чай",
-        "Сезонные напитки"
-    )
 
     BottomSheetScaffold(
         scaffoldState = sheetState,
@@ -128,12 +122,12 @@ fun MainScreen() {
         ) {
 
             Card(
-                shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18 .dp),
+                shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
                 backgroundColor = MaterialTheme.colorScheme.background, // Задаем белый цвет фона для Card
                 elevation = 8.dp,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp-12.dp)
+                    .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp - 12.dp)
                     .align(Alignment.TopCenter) // Центрируем Card внутри Box
                     .background(color = MaterialTheme.colorScheme.background)
             ) {
@@ -141,7 +135,12 @@ fun MainScreen() {
                     modifier = Modifier
                         .fillMaxSize()
                         .background(Color(0xFFFEFEFE)) // Цвет фона для содержимого
-                        .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp)) // Закругление углов для содержимого
+                        .clip(
+                            RoundedCornerShape(
+                                topStart = 16.dp,
+                                topEnd = 16.dp
+                            )
+                        ) // Закругление углов для содержимого
                 ) {
                     Text(
                         text = "Акции и новости",
@@ -170,7 +169,7 @@ fun MainScreen() {
                     Spacer(modifier = Modifier.height(16.dp))
 
                     Text(
-                        text = "Адреса кофеен",
+                        text = "Адреса кофейн",
                         modifier = Modifier
                             .padding(16.dp)
                             .align(Alignment.Start),
@@ -198,20 +197,76 @@ fun MainScreen() {
 
                     Spacer(modifier = Modifier.height(16.dp))
 
-// Карусель для подзаголовков с товарами
-                    // Карусель для подзаголовков с товарами
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        items(productCategories) { category ->
-                            CategoryItem(category)
+
+                    val productCategories = listOf("All", "Category 1", "Category 2", "Category 3")
+                    var selectedCategory by remember { mutableStateOf(productCategories.first()) }
+                    val products = mapOf(
+                        "Category 1" to listOf(
+                            Product("Product 1-1", "Description 1-1"),
+                            Product("Product 1-2", "Description 1-2")
+                        ),
+                        "Category 2" to listOf(
+                            Product("Product 2-1", "Description 2-1"),
+                            Product("Product 2-2", "Description 2-2")
+                        ),
+                        "Category 3" to listOf(
+                            Product("Product 3-1", "Description 3-1"),
+                            Product("Product 3-2", "Description 3-2")
+                        )
+                    )
+// Объединяем все продукты в один список для категории "All"
+                    val allProducts = products.values.flatten()
+                    Column {
+                        // Карусель для подзаголовков с товарами
+                        LazyRow(
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            items(productCategories) { category ->
+                                Text(
+                                    text = category,
+                                    modifier = Modifier
+                                        .padding(8.dp)
+                                        .clickable {
+                                            selectedCategory = category
+                                        },
+                                    color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            }
                         }
+
+                        // Пространство между каруселью и карточками
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        // Карточки с товарами
+                        LazyColumn(
+                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            val selectedProducts =
+                                if (selectedCategory == "All") allProducts else products[selectedCategory]
+                                    ?: emptyList()
+                            items(selectedProducts) { product ->
+                                ProductItem(product)
+                            }
+
+                            // Отображение сообщения, если нет продуктов для выбранной категории
+                            if (selectedProducts.isEmpty()) {
+                                item {
+                                    Text(
+                                        text = "No products available for this category",
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(16.dp),
+                                        style = MaterialTheme.typography.bodyLarge,
+                                        color = MaterialTheme.colorScheme.onSurface
+                                    )
+                                }
+                            }
+                        }
+                        //ProductList()
                     }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    ProductList()
                 }
             }
         }
@@ -280,16 +335,18 @@ fun MainScreen() {
                             )
                         }
                     }
+                    Spacer(modifier = Modifier.height(20.dp)) // Добавляем пустое пространство ниже карточки
                     Box(
                         modifier = Modifier
-                            .paddingFromBaseline(top = 72.dp)
+                            .padding(8.dp)
                             .size(350.dp, 160.dp)
                             .graphicsLayer {
                                 rotationY = rotation
                                 cameraDistance = 12f * density
-                                transformOrigin = TransformOrigin.Center // Set pivot point to the center
+                                transformOrigin = TransformOrigin.Center
                             }
                             .clickable { isFlipped = !isFlipped }
+                            .align(Alignment.CenterHorizontally) // Добавляем выравнивание по центру вертикально
                     ) {
                         Box(
                             modifier = Modifier
@@ -305,8 +362,7 @@ fun MainScreen() {
                             Column(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .padding(top = 8.dp)
-                                    .alpha(cardFrontAlpha),
+                                    .padding(16.dp),
                                 horizontalAlignment = Alignment.CenterHorizontally
                             ) {
                                 Text(
@@ -315,8 +371,7 @@ fun MainScreen() {
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .paddingFromBaseline(top = 0.dp)
+                                    modifier = Modifier.paddingFromBaseline(top = 0.dp)
                                 )
                                 Text(
                                     text = "кешбек 3%",
@@ -324,8 +379,7 @@ fun MainScreen() {
                                     fontSize = 12.sp,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .paddingFromBaseline(top = 12.dp)
+                                    modifier = Modifier.paddingFromBaseline(top = 12.dp)
                                 )
                                 Text(
                                     text = "0",
@@ -333,10 +387,9 @@ fun MainScreen() {
                                     fontSize = 32.sp,
                                     style = MaterialTheme.typography.labelLarge,
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .paddingFromBaseline(top = 12.dp)
+                                    modifier = Modifier.paddingFromBaseline(top = 12.dp)
                                 )
-                                var progress by remember { mutableStateOf(0.5f) } // Set initial progress to 50%
+                                var progress by remember { mutableStateOf(0.5f) }
 
                                 Spacer(modifier = Modifier.height(8.dp))
                                 LinearProgressIndicator(
@@ -355,8 +408,7 @@ fun MainScreen() {
                                     fontSize = 10.sp,
                                     fontWeight = FontWeight.Bold,
                                     textAlign = TextAlign.Center,
-                                    modifier = Modifier
-                                        .paddingFromBaseline(top = 14.dp)
+                                    modifier = Modifier.paddingFromBaseline(top = 14.dp)
                                 )
                             }
                         } else {
@@ -382,20 +434,26 @@ fun MainScreen() {
     )
 }
 
+
+// Пример модели товара
+data class Product(
+    val name: String,
+    val description: String
+)
+
 @Composable
-fun CategoryItem(category: String) {
-    Box(
-        modifier = Modifier
-            .padding(8.dp)
-            .height(40.dp)
-            .background(Color.Gray, RoundedCornerShape(8.dp))
-            .width(IntrinsicSize.Min)
+fun ProductItem(product: Product) {
+    // Здесь определите, как будет выглядеть карточка товара
+    Card(
+        modifier = Modifier.fillMaxWidth(),
+        shape = RoundedCornerShape(8.dp),
+        elevation = 4.dp  // Исправлено: передача конкретного значения типа Dp
     ) {
-        Text(
-            text = category,
-            style = MaterialTheme.typography.bodyLarge,
-            color = Color.White,
-            modifier = Modifier.align(Alignment.Center)
-        )
+        Column(modifier = Modifier.padding(16.dp)) {
+            Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
+            Text(text = product.description, style = MaterialTheme.typography.bodyMedium)
+            // Дополнительная информация о продукте
+        }
     }
 }
+
