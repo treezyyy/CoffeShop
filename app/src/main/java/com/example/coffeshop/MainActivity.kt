@@ -7,6 +7,8 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -30,6 +32,9 @@ import com.example.coffeshop.ui.theme.LogoColor
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,8 +46,10 @@ import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.example.coffeshop.ui.theme.BrownColor
@@ -114,170 +121,154 @@ fun MainScreen() {
 
     BottomSheetScaffold(
         scaffoldState = sheetState,
-        sheetContent = {Box(
-            modifier = Modifier
-                .fillMaxWidth()
-                .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp-12.dp)
-                .background(Color.Transparent) // Устанавливаем прозрачный фон для основного Box
-        ) {
-
-            Card(
-                shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
-                backgroundColor = MaterialTheme.colorScheme.background, // Задаем белый цвет фона для Card
-                elevation = 8.dp,
+        sheetContent = {
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp - 12.dp)
-                    .align(Alignment.TopCenter) // Центрируем Card внутри Box
-                    .background(color = MaterialTheme.colorScheme.background)
+                    .background(Color.Transparent)
             ) {
-                Column(
+                Card(
+                    shape = RoundedCornerShape(topStart = 18.dp, topEnd = 18.dp),
+                    backgroundColor = MaterialTheme.colorScheme.background,
+                    elevation = 8.dp,
                     modifier = Modifier
-                        .fillMaxSize()
-                        .background(Color(0xFFFEFEFE)) // Цвет фона для содержимого
-                        .clip(
-                            RoundedCornerShape(
-                                topStart = 16.dp,
-                                topEnd = 16.dp
-                            )
-                        ) // Закругление углов для содержимого
+                        .fillMaxWidth()
+                        .heightIn(min = 0.dp, LocalConfiguration.current.screenHeightDp.dp - 12.dp)
+                        .align(Alignment.TopCenter)
+                        .background(color = MaterialTheme.colorScheme.background)
                 ) {
-                    Text(
-                        text = "Акции и новости",
+                    Column(
                         modifier = Modifier
-                            .padding(16.dp) // Отступ для заголовка
-                            .align(Alignment.Start),
-                        style = MaterialTheme.typography.bodyLarge, // Выбор стиля для заголовка
-                        color = Color.Black // Убедитесь, что текст видим
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Карусель с элементами
-                    LazyRow(
-                        contentPadding = PaddingValues(horizontal = 16.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            .fillMaxSize()
+                            .background(Color(0xFFFEFEFE))
+                            .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     ) {
-                        items(5) { index ->
-                            Box(
-                                modifier = Modifier
-                                    .size(150.dp, 100.dp)
-                                    .background(Color.Black, RoundedCornerShape(8.dp))
-                            )
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    Text(
-                        text = "Адреса кофейн",
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .align(Alignment.Start),
-                        style = MaterialTheme.typography.bodyLarge,
-                        color = Color.Black
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    // Прямоугольник для Google Maps
-                    val context = LocalContext.current
-                    Box(
-                        modifier = Modifier
-                            .padding(16.dp)
-                            .size(200.dp, 100.dp)
-                            .background(Color.Black, RoundedCornerShape(8.dp))
-                            .clickable {
-                                val intent = Intent(
-                                    Intent.ACTION_VIEW,
-                                    Uri.parse("geo:53.226387,44.925847")
-                                )
-                                context.startActivity(intent)
-                            }
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-
-                    val productCategories = listOf("All", "Category 1", "Category 2", "Category 3")
-                    var selectedCategory by remember { mutableStateOf(productCategories.first()) }
-                    val products = mapOf(
-                        "Category 1" to listOf(
-                            Product("Product 1-1", "Description 1-1"),
-                            Product("Product 1-2", "Description 1-2")
-                        ),
-                        "Category 2" to listOf(
-                            Product("Product 2-1", "Description 2-1"),
-                            Product("Product 2-2", "Description 2-2")
-                        ),
-                        "Category 3" to listOf(
-                            Product("Product 3-1", "Description 3-1"),
-                            Product("Product 3-2", "Description 3-2")
+                        Text(
+                            text = "Акции и новости",
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.Start),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
                         )
-                    )
-// Объединяем все продукты в один список для категории "All"
-                    val allProducts = products.values.flatten()
-                    Column {
-                        // Карусель для подзаголовков с товарами
+                        Spacer(modifier = Modifier.height(16.dp))
+
                         LazyRow(
                             contentPadding = PaddingValues(horizontal = 16.dp),
                             horizontalArrangement = Arrangement.spacedBy(8.dp)
                         ) {
-                            items(productCategories) { category ->
-                                Text(
-                                    text = category,
+                            items(5) { index ->
+                                Image(
+                                    painter = painterResource(id = R.drawable.image1), // Укажите свои изображения
+                                    contentDescription = "Promo Image $index",
+                                    contentScale = ContentScale.Crop,
                                     modifier = Modifier
-                                        .padding(8.dp)
-                                        .clickable {
-                                            selectedCategory = category
-                                        },
-                                    color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
-                                    style = MaterialTheme.typography.bodyLarge
+                                        .size(150.dp, 100.dp)
+                                        .clip(RoundedCornerShape(8.dp))
                                 )
                             }
                         }
 
-                        // Пространство между каруселью и карточками
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        // Карточки с товарами
-                        LazyColumn(
-                            contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                            verticalArrangement = Arrangement.spacedBy(8.dp)
-                        ) {
-                            val selectedProducts =
-                                if (selectedCategory == "All") allProducts else products[selectedCategory]
-                                    ?: emptyList()
-                            items(selectedProducts) { product ->
-                                ProductItem(product)
-                            }
+                        Text(
+                            text = "Адреса кофейн",
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .align(Alignment.Start),
+                            style = MaterialTheme.typography.bodyLarge,
+                            color = Color.Black
+                        )
 
-                            // Отображение сообщения, если нет продуктов для выбранной категории
-                            if (selectedProducts.isEmpty()) {
-                                item {
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        val context = LocalContext.current
+                        Image(
+                            painter = painterResource(id = R.drawable.image1), // Укажите своё изображение
+                            contentDescription = "Coffee Shop Location",
+                            contentScale = ContentScale.Crop,
+                            modifier = Modifier
+                                .padding(16.dp)
+                                .size(200.dp, 100.dp)
+                                .clip(RoundedCornerShape(8.dp))
+                                .clickable {
+                                    val intent = Intent(
+                                        Intent.ACTION_VIEW,
+                                        Uri.parse("geo:53.226387,44.925847")
+                                    )
+                                    context.startActivity(intent)
+                                }
+                        )
+
+                        Spacer(modifier = Modifier.height(16.dp))
+
+                        val productCategories = listOf("All", "Кофе", "Чай", "Десерты")
+                        var selectedCategory by remember { mutableStateOf(productCategories.first()) }
+                        val products = mapOf(
+                            "Category 1" to listOf(
+                                Pair(Product("Product 1-1", "Description 1-1"), R.drawable.image1),
+                                Pair(Product("Product 1-2", "Description 1-2"), R.drawable.image1)
+                            ),
+                            "Category 2" to listOf(
+                                Pair(Product("Product 2-1", "Description 2-1"), R.drawable.image1),
+                                Pair(Product("Product 2-2", "Description 2-2"), R.drawable.image1)
+                            ),
+                            "Category 3" to listOf(
+                                Pair(Product("Product 3-1", "Description 3-1"), R.drawable.image1),
+                                Pair(Product("Product 3-2", "Description 3-2"), R.drawable.image1)
+                            )
+                        )
+                        val allProducts = products.values.flatten()
+
+                        Column {
+                            LazyRow(
+                                contentPadding = PaddingValues(horizontal = 16.dp),
+                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                            ) {
+                                items(productCategories) { category ->
                                     Text(
-                                        text = "No products available for this category",
+                                        text = category,
                                         modifier = Modifier
-                                            .fillMaxWidth()
-                                            .padding(16.dp),
-                                        style = MaterialTheme.typography.bodyLarge,
-                                        color = MaterialTheme.colorScheme.onSurface
+                                            .padding(8.dp)
+                                            .clickable {
+                                                selectedCategory = category
+                                            },
+                                        color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                        style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
                             }
+
+                            Spacer(modifier = Modifier.height(16.dp))
+
+                            val selectedProducts =
+                                if (selectedCategory == "All") allProducts else products[selectedCategory]
+                                    ?: emptyList()
+
+                            ProductGrid(selectedProducts)
+
+                            if (selectedProducts.isEmpty()) {
+                                Text(
+                                    text = "No products available for this category",
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.onSurface
+                                )
+                            }
                         }
-                        //ProductList()
                     }
                 }
             }
-        }
         },
-
         sheetPeekHeight = 458.dp,
         content = {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(MaterialTheme.colorScheme.background) // Цвет фона для основного контента
+                    .background(MaterialTheme.colorScheme.background)
             ) {
                 Column(
                     modifier = Modifier
@@ -301,19 +292,19 @@ fun MainScreen() {
                         Column(
                             modifier = Modifier
                                 .padding(start = 20.dp)
-                                .weight(1f) // Отступ справа
+                                .weight(1f)
                         ) {
                             Text(
                                 text = "Кофейку,",
-                                color = BrownColor, // Цвет текста
-                                fontSize = 24.sp, // Размер текста
+                                color = BrownColor,
+                                fontSize = 24.sp,
                                 style = MaterialTheme.typography.bodyLarge,
                             )
-                            Spacer(modifier = Modifier.height(0.dp)) // Adjust this value to control the spacing
+                            Spacer(modifier = Modifier.height(0.dp))
                             Text(
-                                text = "Худан?", // Текст с именем
-                                color = BrownColor, // Цвет текста
-                                fontSize = 24.sp, // Размер текста
+                                text = "Худан?",
+                                color = BrownColor,
+                                fontSize = 24.sp,
                                 style = MaterialTheme.typography.displayLarge,
                             )
                         }
@@ -327,7 +318,7 @@ fun MainScreen() {
                             },
                             modifier = Modifier
                                 .size(48.dp)
-                                .padding(end = 16.dp) // Размер кружка
+                                .padding(end = 16.dp)
                         ) {
                             Icon(
                                 imageVector = Icons.Default.AccountCircle,
@@ -335,7 +326,7 @@ fun MainScreen() {
                             )
                         }
                     }
-                    Spacer(modifier = Modifier.height(20.dp)) // Добавляем пустое пространство ниже карточки
+                    Spacer(modifier = Modifier.height(20.dp))
                     Box(
                         modifier = Modifier
                             .padding(8.dp)
@@ -346,7 +337,7 @@ fun MainScreen() {
                                 transformOrigin = TransformOrigin.Center
                             }
                             .clickable { isFlipped = !isFlipped }
-                            .align(Alignment.CenterHorizontally) // Добавляем выравнивание по центру вертикально
+                            .align(Alignment.CenterHorizontally)
                     ) {
                         Box(
                             modifier = Modifier
@@ -442,18 +433,47 @@ data class Product(
 )
 
 @Composable
-fun ProductItem(product: Product) {
-    // Здесь определите, как будет выглядеть карточка товара
+fun ProductItem(product: Product, imageResId: Int) {
     Card(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
         shape = RoundedCornerShape(8.dp),
-        elevation = 4.dp  // Исправлено: передача конкретного значения типа Dp
+        elevation = 4.dp
     ) {
-        Column(modifier = Modifier.padding(16.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(16.dp)
+                .fillMaxWidth()
+        ) {
+            // Используем изображение продукта здесь
+            Image(
+                painter = painterResource(id = imageResId),
+                contentDescription = product.name,
+                contentScale = ContentScale.Crop, // Устанавливаем масштабирование изображения
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(150.dp)
+            )
+            Spacer(modifier = Modifier.height(8.dp))
             Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
+            Spacer(modifier = Modifier.height(4.dp))
             Text(text = product.description, style = MaterialTheme.typography.bodyMedium)
-            // Дополнительная информация о продукте
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+fun ProductGrid(products: List<Pair<Product, Int>>) { // Изменено для приема пар (Product, Int)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        contentPadding = PaddingValues(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(products) { (product, imageResId) ->
+            ProductItem(product, imageResId)
+        }
+    }
+}
