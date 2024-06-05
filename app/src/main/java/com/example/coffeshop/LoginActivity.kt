@@ -17,11 +17,23 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.room.Room
+import com.example.coffeshop.ui.theme.AppDatabase
 import com.example.coffeshop.ui.theme.CoffeShopTheme
+import com.example.coffeshop.ui.theme.User
+import kotlinx.coroutines.launch
 
 class LoginActivity : ComponentActivity() {
+    private lateinit var db: AppDatabase
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        db = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java, "coffee-shop-database"
+        ).build()
+
         setContent {
             CoffeShopTheme {
                 Surface(
@@ -32,17 +44,13 @@ class LoginActivity : ComponentActivity() {
                     var isRegistrationScreenVisible by remember { mutableStateOf(false) }
 
                     if (isRegistrationScreenVisible) {
-                        RegistrationScreen(onBackPressed = { isRegistrationScreenVisible = false })
+                        RegistrationScreen(db = db, onBackPressed = { isRegistrationScreenVisible = false })
                     } else {
                         LoginScreen(
-                            context = context,
-                            onLogin = { username, password ->
-                                if (username == "admin" && password == "1234") {
-                                    context.startActivity(Intent(context, MainActivity::class.java))
-                                    (context as Activity).finish()
-                                } else {
-                                    Toast.makeText(context, "Неправильный логин или пароль", Toast.LENGTH_SHORT).show()
-                                }
+                            db = db,
+                            onLoginSuccess = {
+                                context.startActivity(Intent(context, MainActivity::class.java))
+                                (context as Activity).finish()
                             },
                             onRegister = { isRegistrationScreenVisible = true }
                         )
@@ -53,10 +61,11 @@ class LoginActivity : ComponentActivity() {
     }
 }
 @Composable
-fun RegistrationScreen(onBackPressed: () -> Unit) {
-    var phoneNumber by remember { mutableStateOf("") }
+fun RegistrationScreen(db: AppDatabase, onBackPressed: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Box(
         contentAlignment = Alignment.Center,
@@ -66,13 +75,6 @@ fun RegistrationScreen(onBackPressed: () -> Unit) {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier.padding(16.dp)
         ) {
-            TextField(
-                value = phoneNumber,
-                onValueChange = { phoneNumber = it },
-                label = { Text("Номер телефона") },
-                modifier = Modifier.fillMaxWidth()
-            )
-            Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = username,
                 onValueChange = { username = it },
@@ -92,7 +94,14 @@ fun RegistrationScreen(onBackPressed: () -> Unit) {
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Button(onClick = { /* Handle registration logic */ }) {
+                Button(onClick = {
+                    scope.launch {
+                        val userDao = db.userDao()
+                        userDao.insertUser(User(username = username, password = password))
+                        Toast.makeText(context, "Регистрация успешна", Toast.LENGTH_SHORT).show()
+                        onBackPressed()
+                    }
+                }) {
                     Text("Зарегистрироваться")
                 }
                 TextButton(onClick = onBackPressed) {
@@ -104,9 +113,11 @@ fun RegistrationScreen(onBackPressed: () -> Unit) {
 }
 
 @Composable
-fun LoginScreen(context: Context, onLogin: (String, String) -> Unit, onRegister: () -> Unit) {
+fun LoginScreen(db: AppDatabase, onLoginSuccess: () -> Unit, onRegister: () -> Unit) {
     var username by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    val scope = rememberCoroutineScope()
 
     Box(
         contentAlignment = Alignment.Center,
@@ -131,7 +142,17 @@ fun LoginScreen(context: Context, onLogin: (String, String) -> Unit, onRegister:
                 modifier = Modifier.fillMaxWidth()
             )
             Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = { onLogin(username, password) }) {
+            Button(onClick = {
+                scope.launch {
+                    val userDao = db.userDao()
+                    val user = userDao.getUser(username, password)
+                    if (user != null) {
+                        onLoginSuccess()
+                    } else {
+                        Toast.makeText(context, "Неправильный логин или пароль", Toast.LENGTH_SHORT).show()
+                    }
+                }
+            }) {
                 Text("Войти")
             }
             Spacer(modifier = Modifier.height(16.dp))
