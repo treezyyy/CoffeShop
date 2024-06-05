@@ -234,7 +234,7 @@ fun MainScreen() {
                                             .clickable {
                                                 selectedCategory = category
                                             },
-                                        color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+                                        color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else Color.Black,
                                         style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
@@ -255,7 +255,7 @@ fun MainScreen() {
                                         .fillMaxWidth()
                                         .padding(16.dp),
                                     style = MaterialTheme.typography.bodyLarge,
-                                    color = MaterialTheme.colorScheme.onSurface
+                                    color = Color.Black
                                 )
                             }
                         }
@@ -477,3 +477,9 @@ fun ProductGrid(products: List<Pair<Product, Int>>) { // Изменено для
         }
     }
 }
+
+
+data class OrderItem(
+    val product: Product,
+    var quantity: Int
+)
