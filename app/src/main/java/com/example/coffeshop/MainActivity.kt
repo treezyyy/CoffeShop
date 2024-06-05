@@ -203,18 +203,18 @@ fun MainScreen() {
 
                         Spacer(modifier = Modifier.height(16.dp))
 
-                        val productCategories = listOf("All", "Кофе", "Чай", "Десерты")
+                        val productCategories = listOf("All", "Чай", "Кофе", "Десерты")
                         var selectedCategory by remember { mutableStateOf(productCategories.first()) }
                         val products = mapOf(
-                            "Category 1" to listOf(
+                            "Чай" to listOf(
                                 Pair(Product("Product 1-1", "Description 1-1"), R.drawable.image1),
                                 Pair(Product("Product 1-2", "Description 1-2"), R.drawable.image1)
                             ),
-                            "Category 2" to listOf(
+                            "Кофе" to listOf(
                                 Pair(Product("Product 2-1", "Description 2-1"), R.drawable.image1),
                                 Pair(Product("Product 2-2", "Description 2-2"), R.drawable.image1)
                             ),
-                            "Category 3" to listOf(
+                            "Десерты" to listOf(
                                 Pair(Product("Product 3-1", "Description 3-1"), R.drawable.image1),
                                 Pair(Product("Product 3-2", "Description 3-2"), R.drawable.image1)
                             )
