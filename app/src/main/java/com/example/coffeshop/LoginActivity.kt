@@ -9,17 +9,30 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.*
+import androidx.compose.material3.MaterialTheme.typography
+import androidx.compose.material3.TextFieldDefaults.textFieldColors
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.room.Room
 import com.example.coffeshop.ui.theme.AppDatabase
+import com.example.coffeshop.ui.theme.BrownColor
 import com.example.coffeshop.ui.theme.CoffeShopTheme
+import com.example.coffeshop.ui.theme.CoffeeColor
+import com.example.coffeshop.ui.theme.LogoColor
 import com.example.coffeshop.ui.theme.User
 import kotlinx.coroutines.launch
 
@@ -60,6 +73,7 @@ class LoginActivity : ComponentActivity() {
         }
     }
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RegistrationScreen(db: AppDatabase, onBackPressed: () -> Unit) {
     var username by remember { mutableStateOf("") }
@@ -79,15 +93,35 @@ fun RegistrationScreen(db: AppDatabase, onBackPressed: () -> Unit) {
                 value = username,
                 onValueChange = { username = it },
                 label = { Text("Логин") },
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = LogoColor,
+                    focusedIndicatorColor = CoffeeColor,
+                    unfocusedIndicatorColor = CoffeeColor,
+                    focusedTextColor  = CoffeeColor, // Цвет текста
+                    cursorColor = CoffeeColor, // Цвет курсора
+                    focusedLabelColor = CoffeeColor, // Цвет метки в фокусе
+                    unfocusedLabelColor = CoffeeColor // Цвет метки без фокуса
+                )
+
             )
             Spacer(modifier = Modifier.height(16.dp))
             TextField(
                 value = password,
                 onValueChange = { password = it },
                 label = { Text("Пароль") },
-                visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+              //  visualTransformation = PasswordVisualTransformation(),
+                modifier = Modifier.fillMaxWidth(),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = LogoColor,
+                    focusedIndicatorColor = CoffeeColor,
+                    unfocusedIndicatorColor = CoffeeColor,
+                    focusedTextColor  = CoffeeColor, // Цвет текста
+                    cursorColor = CoffeeColor, // Цвет курсора
+                    focusedLabelColor = CoffeeColor, // Цвет метки в фокусе
+                    unfocusedLabelColor = CoffeeColor // Цвет метки без фокуса
+                )
+
             )
             Spacer(modifier = Modifier.height(16.dp))
             Row(
@@ -101,7 +135,13 @@ fun RegistrationScreen(db: AppDatabase, onBackPressed: () -> Unit) {
                         Toast.makeText(context, "Регистрация успешна", Toast.LENGTH_SHORT).show()
                         onBackPressed()
                     }
-                }) {
+                },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = LogoColor,
+                        contentColor = CoffeeColor
+                    )
+
+                ) {
                     Text("Зарегистрироваться")
                 }
                 TextButton(onClick = onBackPressed) {
@@ -110,8 +150,7 @@ fun RegistrationScreen(db: AppDatabase, onBackPressed: () -> Unit) {
             }
         }
     }
-}
-
+}@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun LoginScreen(db: AppDatabase, onLoginSuccess: () -> Unit, onRegister: () -> Unit) {
     var username by remember { mutableStateOf("") }
@@ -130,34 +169,74 @@ fun LoginScreen(db: AppDatabase, onLoginSuccess: () -> Unit, onRegister: () -> U
             TextField(
                 value = username,
                 onValueChange = { username = it },
-                label = { Text("Логин") },
-                modifier = Modifier.fillMaxWidth()
+                label = { Text("Логин",style = MaterialTheme.typography.bodyLarge) },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(LogoColor),  // Задний фон синий
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = LogoColor,
+                    focusedIndicatorColor = CoffeeColor,
+                    unfocusedIndicatorColor = CoffeeColor,
+                    focusedTextColor  = CoffeeColor, // Цвет текста
+                    cursorColor = CoffeeColor, // Цвет курсора
+                    focusedLabelColor = CoffeeColor, // Цвет метки в фокусе
+                    unfocusedLabelColor = CoffeeColor // Цвет метки без фокуса
+                )
             )
-            Spacer(modifier = Modifier.height(16.dp))
+            Spacer(modifier = Modifier.height(16.dp))  // Уменьшение расстояния
             TextField(
                 value = password,
                 onValueChange = { password = it },
-                label = { Text("Пароль") },
+                label = { Text("Пароль",style = MaterialTheme.typography.bodyLarge) },
                 visualTransformation = PasswordVisualTransformation(),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(8.dp))
+                    .background(LogoColor),  // Задний фон синий
+                shape = RoundedCornerShape(8.dp),
+                colors = TextFieldDefaults.textFieldColors(
+                    containerColor = LogoColor,
+                    focusedIndicatorColor = CoffeeColor,
+                    unfocusedIndicatorColor = CoffeeColor,
+                    focusedTextColor  = CoffeeColor, // Цвет текста
+                    cursorColor = CoffeeColor, // Цвет курсора
+                    focusedLabelColor = CoffeeColor, // Цвет метки в фокусе
+                    unfocusedLabelColor = CoffeeColor // Цвет метки без фокуса
+                )
             )
-            Spacer(modifier = Modifier.height(16.dp))
-            Button(onClick = {
-                scope.launch {
-                    val userDao = db.userDao()
-                    val user = userDao.getUser(username, password)
-                    if (user != null) {
-                        onLoginSuccess()
-                    } else {
-                        Toast.makeText(context, "Неправильный логин или пароль", Toast.LENGTH_SHORT).show()
-                    }
-                }
-            }) {
-                Text("Войти")
+            Spacer(modifier = Modifier.height(0.dp))  // Уменьшение расстояния
+            TextButton(
+                onClick = onRegister,
+                modifier = Modifier
+                    .wrapContentWidth()
+                    .height(IntrinsicSize.Min) // Уменьшение высоты гиперссылки
+            ) {
+                Text(
+                    "Зарегистрироваться",
+                    fontSize = 16.sp // Уменьшение размера текста гиперссылки
+                )
             }
-            Spacer(modifier = Modifier.height(16.dp))
-            TextButton(onClick = onRegister) {
-                Text("Зарегистрироваться")
+            Spacer(modifier = Modifier.height(0.dp))  // Уменьшение расстояния
+            Button(
+                onClick = {
+                    scope.launch {
+                        val userDao = db.userDao()
+                        val user = userDao.getUser(username, password)
+                        if (user != null) {
+                            onLoginSuccess()
+                        } else {
+                            Toast.makeText(context, "Неправильный логин или пароль", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                },
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = LogoColor,
+                    contentColor = CoffeeColor
+                )
+            ) {
+                Text("Войти")
             }
         }
     }

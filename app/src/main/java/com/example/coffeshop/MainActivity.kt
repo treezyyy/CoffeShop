@@ -152,7 +152,7 @@ fun MainScreen() {
                             style = MaterialTheme.typography.bodyLarge,
                             color = Color.Black
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                         LazyRow(
                             contentPadding = PaddingValues(horizontal = 16.dp),
@@ -170,7 +170,7 @@ fun MainScreen() {
                             }
                         }
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                         Text(
                             text = "Адреса кофейн",
@@ -181,7 +181,7 @@ fun MainScreen() {
                             color = Color.Black
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                         val context = LocalContext.current
                         Image(
@@ -201,7 +201,7 @@ fun MainScreen() {
                                 }
                         )
 
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.height(8.dp))
 
                         val productCategories = listOf("All", "Чай", "Кофе", "Десерты")
                         var selectedCategory by remember { mutableStateOf(productCategories.first()) }
@@ -223,18 +223,25 @@ fun MainScreen() {
 
                         Column {
                             LazyRow(
-                                contentPadding = PaddingValues(horizontal = 16.dp),
-                                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                                contentPadding = PaddingValues(horizontal = 8.dp),
+                                horizontalArrangement = Arrangement.spacedBy(0.dp) // Уменьшаем расстояние между категориями
                             ) {
                                 items(productCategories) { category ->
+                                    val isSelected = selectedCategory == category
+
                                     Text(
                                         text = category,
                                         modifier = Modifier
                                             .padding(8.dp)
                                             .clickable {
                                                 selectedCategory = category
-                                            },
-                                        color = if (selectedCategory == category) MaterialTheme.colorScheme.primary else Color.Black,
+                                            }
+                                            .background(
+                                                color = if (isSelected) Color.LightGray else Color.Transparent,
+                                                shape = RoundedCornerShape(8.dp) // Добавляем закругление заднего фона
+                                            )
+                                            .padding(8.dp),
+                                        color = Color.Black,
                                         style = MaterialTheme.typography.bodyLarge
                                     )
                                 }
@@ -259,6 +266,8 @@ fun MainScreen() {
                                 )
                             }
                         }
+
+
                     }
                 }
             }
@@ -320,8 +329,9 @@ fun MainScreen() {
                                 .size(48.dp)
                                 .padding(end = 16.dp)
                         ) {
-                            Icon(
-                                imageVector = Icons.Default.AccountCircle,
+                            Image(
+                                //imageVector = Icons.Default.AccountCircle,
+                                painter = painterResource(id = R.drawable.icon),
                                 contentDescription = "Меню аккаунта"
                             )
                         }

@@ -21,7 +21,7 @@ val coffeshopTypography = Typography(
     displayLarge = androidx.compose.ui.text.TextStyle(
         fontFamily = OswaldBold,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 24.sp
+        fontSize = 104.sp
     ),
     bodyLarge = androidx.compose.ui.text.TextStyle(
         fontFamily = OswaldLight,
