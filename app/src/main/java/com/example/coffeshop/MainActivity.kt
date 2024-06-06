@@ -61,6 +61,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+
         // Проверка авторизации
         if (!isUserLoggedIn()) {
             startActivity(Intent(this, LoginActivity::class.java))
@@ -161,7 +162,7 @@ fun MainScreen() {
                         ) {
                             items(5) { index ->
                                 Image(
-                                    painter = painterResource(id = R.drawable.image1), // Укажите свои изображения
+                                    painter = painterResource(id = R.drawable.skoro), // Укажите свои изображения
                                     contentDescription = "Promo Image $index",
                                     contentScale = ContentScale.Crop,
                                     modifier = Modifier
@@ -186,7 +187,7 @@ fun MainScreen() {
 
                         val context = LocalContext.current
                         Image(
-                            painter = painterResource(id = R.drawable.image1), // Укажите своё изображение
+                            painter = painterResource(id = R.drawable.maps), // Укажите своё изображение
                             contentDescription = "Coffee Shop Location",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier
@@ -208,16 +209,16 @@ fun MainScreen() {
                         var selectedCategory by remember { mutableStateOf(productCategories.first()) }
                         val products = mapOf(
                             "Чай" to listOf(
-                                Pair(Product("Product 1-1", "Description 1-1"), R.drawable.image1),
-                                Pair(Product("Product 1-2", "Description 1-2"), R.drawable.image1)
+                                Pair(Product("Чай черный", "Супер вкусный чай"), R.drawable.blacks),
+                                Pair(Product("Чай элгрей", "Ультра вкусный чай"), R.drawable.elgray)
                             ),
                             "Кофе" to listOf(
-                                Pair(Product("Product 2-1", "Description 2-1"), R.drawable.image1),
-                                Pair(Product("Product 2-2", "Description 2-2"), R.drawable.image1)
+                                Pair(Product("Капучино", "У нас самый вкусный"), R.drawable.capuchinko),
+                                Pair(Product("Солёное", "Специальное предложение"), R.drawable.karamel)
                             ),
                             "Десерты" to listOf(
-                                Pair(Product("Product 3-1", "Description 3-1"), R.drawable.image1),
-                                Pair(Product("Product 3-2", "Description 3-2"), R.drawable.image1)
+                                Pair(Product("Макэндчиз", "Чиназесный десерт"), R.drawable.chinazes),
+                                Pair(Product("Сникерс", "Сникерсный десерт"), R.drawable.snikers)
                             )
                         )
                         val allProducts = products.values.flatten()
