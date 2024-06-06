@@ -426,7 +426,7 @@ fun MainScreen() {
                                 contentAlignment = Alignment.Center
                             ) {
                                 Text(
-                                    text = "Обратная сторона",
+                                    text = "-------------------",
                                     color = Color.Black,
                                     fontSize = 20.sp,
                                     fontWeight = FontWeight.Bold,
