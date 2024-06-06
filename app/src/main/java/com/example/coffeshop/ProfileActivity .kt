@@ -108,6 +108,7 @@ class ProfileActivity : ComponentActivity() {
         }
     }
 
+
     // Компонент для отображения каждой пары
     @Composable
     fun PairItem(item: String, value: String) {

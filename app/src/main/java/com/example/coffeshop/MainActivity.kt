@@ -39,6 +39,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ColorScheme
 import androidx.compose.runtime.*
@@ -141,7 +142,7 @@ fun MainScreen() {
                     Column(
                         modifier = Modifier
                             .fillMaxSize()
-                            .background(Color(0xFFFEFEFE))
+                             .background(Color(0xFFFEFEFE))
                             .clip(RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp))
                     ) {
                         Text(
@@ -220,6 +221,10 @@ fun MainScreen() {
                             )
                         )
                         val allProducts = products.values.flatten()
+                        var addedProducts by remember { mutableStateOf(listOf<Product>()) }
+                        fun handleAddProduct(product: Product) {
+                            addedProducts = addedProducts + product
+                        }
 
                         Column {
                             LazyRow(
@@ -253,7 +258,7 @@ fun MainScreen() {
                                 if (selectedCategory == "All") allProducts else products[selectedCategory]
                                     ?: emptyList()
 
-                            ProductGrid(selectedProducts)
+                            ProductGrid(products = selectedProducts, onAddProduct = ::handleAddProduct)
 
                             if (selectedProducts.isEmpty()) {
                                 Text(
@@ -443,7 +448,7 @@ data class Product(
 )
 
 @Composable
-fun ProductItem(product: Product, imageResId: Int) {
+fun ProductItem(product: Product, imageResId: Int, onAddProduct: (Product) -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -456,11 +461,10 @@ fun ProductItem(product: Product, imageResId: Int) {
                 .padding(16.dp)
                 .fillMaxWidth()
         ) {
-            // Используем изображение продукта здесь
             Image(
                 painter = painterResource(id = imageResId),
                 contentDescription = product.name,
-                contentScale = ContentScale.Crop, // Устанавливаем масштабирование изображения
+                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(150.dp)
@@ -469,13 +473,22 @@ fun ProductItem(product: Product, imageResId: Int) {
             Text(text = product.name, style = MaterialTheme.typography.headlineSmall)
             Spacer(modifier = Modifier.height(4.dp))
             Text(text = product.description, style = MaterialTheme.typography.bodyMedium)
+            Spacer(modifier = Modifier.height(8.dp))
+            Button(
+                onClick = { onAddProduct(product) },
+                modifier = Modifier.align(Alignment.End)
+            ) {
+                Icon(imageVector = Icons.Default.Add, contentDescription = "Add")
+                Spacer(modifier = Modifier.width(4.dp))
+                Text(text = "Add")
+            }
         }
     }
 }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun ProductGrid(products: List<Pair<Product, Int>>) { // Изменено для приема пар (Product, Int)
+fun ProductGrid(products: List<Pair<Product, Int>>, onAddProduct: (Product) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         contentPadding = PaddingValues(8.dp),
@@ -483,7 +496,7 @@ fun ProductGrid(products: List<Pair<Product, Int>>) { // Изменено для
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(products) { (product, imageResId) ->
-            ProductItem(product, imageResId)
+            ProductItem(product = product, imageResId = imageResId, onAddProduct = onAddProduct)
         }
     }
 }
