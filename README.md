@@ -53,16 +53,16 @@
 
 Пользовательская документация:
 
-- [Руководство пользователя](https://github.com/marklum7/Helper-manager/wiki/8.-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F)
+- [Руководство пользователя](https://github.com/treezyyy/CoffeShop/wiki/8.-%D0%A0%D1%83%D0%BA%D0%BE%D0%B2%D0%BE%D0%B4%D1%81%D1%82%D0%B2%D0%BE-%D0%BF%D0%BE%D0%BB%D1%8C%D0%B7%D0%BE%D0%B2%D0%B0%D1%82%D0%B5%D0%BB%D1%8F)
   
 Документация разработки:
 
-- [Техническое задание](https://github.com/marklum7/Helper-manager/wiki/1.-%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5)
-- [Спецификация](https://github.com/marklum7/Helper-manager/wiki/2.-%D0%A1%D0%BF%D0%B5%D1%86%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F)
-- [Требования](https://github.com/marklum7/Helper-manager/wiki/3.-%D0%A2%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F)
-- [Прецеденты](https://github.com/marklum7/Helper-manager/wiki/4.-%D0%9F%D1%80%D0%B5%D1%86%D0%B5%D0%B4%D0%B5%D0%BD%D1%82%D1%8B)
-- [Уровни интеграции](https://github.com/marklum7/Helper-manager/wiki/5.-%D0%A3%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D0%B8)
-- [Отладочный класс](https://github.com/marklum7/Helper-manager/wiki/6.-%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B0%D1%81%D1%81)
-- [Логирование](https://github.com/marklum7/Helper-manager/wiki/7.-%D0%9B%D0%BE%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
-- [Диаграммы](https://github.com/marklum7/Helper-manager/wiki/9.-%D0%94%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%8B)
-- [Тестирование](https://github.com/marklum7/Helper-manager/wiki/10.-%D0%A2%D0%B5%D1%81%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
+- [Техническое задание](https://github.com/treezyyy/CoffeShop/wiki/1.-%D0%A2%D0%B5%D1%85%D0%BD%D0%B8%D1%87%D0%B5%D1%81%D0%BA%D0%BE%D0%B5-%D0%B7%D0%B0%D0%B4%D0%B0%D0%BD%D0%B8%D0%B5)
+- [Спецификация](https://github.com/treezyyy/CoffeShop/wiki/2.-%D0%A1%D0%BF%D0%B5%D1%86%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%86%D0%B8%D1%8F)
+- [Требования](https://github.com/treezyyy/CoffeShop/wiki/3.-%D0%A2%D1%80%D0%B5%D0%B1%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%8F)
+- [Прецеденты](https://github.com/treezyyy/CoffeShop/wiki/4.-%D0%9F%D1%80%D0%B5%D1%86%D0%B5%D0%B4%D0%B5%D0%BD%D1%82%D1%8B)
+- [Уровни интеграции](https://github.com/treezyyy/CoffeShop/wiki/5.-%D0%A3%D1%80%D0%BE%D0%B2%D0%BD%D0%B8-%D0%B8%D0%BD%D1%82%D0%B5%D0%B3%D1%80%D0%B0%D1%86%D0%B8%D0%B8)
+- [Отладочный класс](https://github.com/treezyyy/CoffeShop/wiki/6.-%D0%9E%D1%82%D0%BB%D0%B0%D0%B4%D0%BE%D1%87%D0%BD%D1%8B%D0%B9-%D0%BA%D0%BB%D0%B0%D1%81%D1%81)
+- [Логирование](https://github.com/treezyyy/CoffeShop/wiki/7.-%D0%9B%D0%BE%D0%B3%D0%B3%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
+- [Диаграммы](https://github.com/treezyyy/CoffeShop/wiki/9.-%D0%94%D0%B8%D0%B0%D0%B3%D1%80%D0%B0%D0%BC%D0%BC%D1%8B)
+- [Тестирование](https://github.com/treezyyy/CoffeShop/wiki/10.-%D0%A2%D0%B5%D1%81%D1%82%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D0%B5)
